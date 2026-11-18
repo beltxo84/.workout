@@ -34,11 +34,16 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - name: Comprobar que la etiqueta coincide con la versión de la página
+      - name: Comprobar que la etiqueta coincide con la version de la pagina
+        env:
+          TAG: ${{ github.ref_name }}
         run: |
           V=$(grep -o 'name="app-version" content="[^"]*"' Resources/index.html | sed 's/.*content="//; s/"//')
-          echo "Página: $V · Etiqueta: ${{ github.ref_name }}"
-          [ "v$V" = "${{ github.ref_name }}" ] || { echo "::error::La etiqueta no coincide con app-version de index.html"; exit 1; }
+          echo "Pagina: $V / Etiqueta: $TAG"
+          if [ "v$V" != "$TAG" ]; then
+            echo "La etiqueta no coincide con app-version de index.html"
+            exit 1
+          fi
       - uses: actions/download-artifact@v4
         with:
           path: dist
@@ -46,6 +51,5 @@ jobs:
       - run: cp Resources/index.html dist/index.html
       - uses: softprops/action-gh-release@v2
         with:
-          files: dist/*
+          files: "dist/*"
           generate_release_notes: true
-```[cite: 1]
