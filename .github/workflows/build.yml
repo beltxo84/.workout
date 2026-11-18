@@ -1,0 +1,51 @@
+name: Build DMG
+
+on:
+  push:
+    branches: ["**"]
+    tags: ["v*"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        include:
+          - arch: arm64
+            label: apple-silicon
+          - arch: x86_64
+            label: intel
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compilar y crear DMG
+        run: bash build.sh ${{ matrix.arch }} ${{ matrix.label }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: WorkoutDesigner-${{ matrix.label }}
+          path: WorkoutDesigner-${{ matrix.label }}.dmg
+
+  # Solo cuando se sube una etiqueta tipo v1.1: publica el Release que la app consulta.
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Comprobar que la etiqueta coincide con la versión de la página
+        run: |
+          V=$(grep -o 'name="app-version" content="[^"]*"' Resources/index.html | sed 's/.*content="//; s/"//')
+          echo "Página: $V · Etiqueta: ${{ github.ref_name }}"
+          [ "v$V" = "${{ github.ref_name }}" ] || { echo "::error::La etiqueta no coincide con app-version de index.html"; exit 1; }
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - run: cp Resources/index.html dist/index.html
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          generate_release_notes: true
+```[cite: 1]
