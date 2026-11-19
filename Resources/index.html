@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark"><meta name="app-version" content="1.1"><meta name="min-shell" content="1.0">
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark"><meta name="app-version" content="1.2"><meta name="min-shell" content="1.0">
 <title>.workout</title>
 <style>
 :root{--bg:#f2f2f7;--card:#fff;--bg2:#e9e9ee;--seg:#fff;--tx:#000;--mu:#6e6e73;--ln:#e5e5ea;--ac:#8e5cf0;--lime:#4f9a00;--ej:#0a84d6;--re:#c79a00;color-scheme:light dark}
@@ -451,7 +451,27 @@ function parseGPX(x){const P=[],E=[],T=[],H=[];
   const spl=u=>{if(!t0||T.some(v=>isNaN(v))||C[C.length-1]<u)return[];const o=[];let k=1,pv=T[0];for(let i=1;i<P.length;i++){while(C[i]>=k*u&&C[i]>C[i-1]){const tk=T[i-1]+(T[i]-T[i-1])*((k*u-C[i-1])/(C[i]-C[i-1]));o.push({d:u,t:(tk-pv)/1000,a:1});pv=tk;k++}}const rem=C[C.length-1]-(k-1)*u;if(rem>u*.1&&T[T.length-1]>pv)o.push({d:rem,t:(T[T.length-1]-pv)/1000,a:1});return o};
   return{spl:{100:spl(100),1000:spl(1000)},name:nm?xml(nm[1]):"",sport:gpxSport(ty&&ty[1]),t0,dist,dur,hr:H.length?Math.round(H.reduce((a,b)=>a+b,0)/H.length):0,hx:H.length?Math.max(...H):0,vs:dur?dist/dur*3.6:0,vx,el:Math.round(gain),pts:simplify(P)}}
 //#fit
-function parseFIT(b){const dv=new DataView(b.buffer,b.byteOffset,b.byteLength),hs=b[0],end=Math.min(b.length-2,hs+dv.getUint32(4,true)),defs={},R={20:[],19:[],18:[]};let p=hs;
+// Piscina (Strava/Apple Salud): las vueltas alternan serie y descanso, pero la distancia de la última longitud
+// de cada serie cae en la vuelta de descanso siguiente. Se detectan los descansos por las pausas del cronómetro
+// (eventos) y se devuelve esa distancia a su serie. Una vuelta superpuesta a la anterior se une a ella.
+function poolLaps(R,EV,E0){
+  const ev=EV.filter(e=>e[0]===0&&e[253]!==undefined).map(e=>[e[253],e[1]]).sort((a,b)=>a[0]-b[0]),st=[];let o=null;
+  for(const[ts,ty]of ev){if(ty===1||ty===4){if(o===null)o=ts}else if(ty===0&&o!==null){st.push([o,ts]);o=null}}
+  if(o!==null)st.push([o,1e12]);
+  const ov=(a,b)=>st.reduce((x,[p,q])=>x+Math.max(0,Math.min(b,q)-Math.max(a,p)),0),out=[];
+  for(const l of R){const s=l[2],e=l[253],te=(l[7]||0)/1000,tm=(l[8]||0)/1000,d=(l[9]||0)/100;if(!s||!e)return null;
+    const p=out[out.length-1];
+    if(p&&s<p.e-1){p.d+=d;if(e>p.e)out.push({d:0,t:e-p.e,s:p.e,e,r:1});continue}
+    const du=e-s,r=d===0||(du>0&&ov(s,e)/du>=.5);
+    out.push({d,t:(r?te:(tm>=te*.5?tm:te))||du,s,e,r})}
+  const res=[];
+  for(const x of out){
+    if(x.r&&x.d>0)for(let k=res.length-1;k>=0;k--)if(!res[k].r){res[k].d+=x.d;x.d=0;break}
+    const q=res[res.length-1];
+    if(x.r&&q&&q.r)q.t+=x.t;else res.push(x)}
+  while(res.length&&res[res.length-1].r)res.pop();
+  return res.length>1?res.map(x=>({d:x.d,t:x.t,s:x.s*1000+E0})):null}
+function parseFIT(b){const dv=new DataView(b.buffer,b.byteOffset,b.byteLength),hs=b[0],end=Math.min(b.length-2,hs+dv.getUint32(4,true)),defs={},R={20:[],19:[],18:[],21:[]};let p=hs;
   while(p<end){const h=b[p++];
     if(h&64){const lt=h&15;p++;const le=b[p++]===0,gm=dv.getUint16(p,le);p+=2;const n=b[p++],f=[];for(let i=0;i<n;i++){f.push([b[p],b[p+1]]);p+=3}let ds=0;if(h&32){const nd=b[p++];for(let i=0;i<nd;i++){ds+=b[p+1];p+=3}}defs[lt]={gm,le,f,ds};continue}
     const d=defs[h&128?(h>>5)&3:h&15];if(!d)throw Error("fit");const r={};
@@ -459,7 +479,8 @@ function parseFIT(b){const dv=new DataView(b.buffer,b.byteOffset,b.byteLength),h
     p+=d.ds;if(R[d.gm])R[d.gm].push(r)}
   const E0=631065600000,S=R[18][0]||{},P=[],H=[];
   for(const r of R[20]){if(r[0]!==undefined&&r[1]!==undefined&&r[0]!==2147483647&&r[1]!==2147483647)P.push([(r[0]|0)*180/2147483648,(r[1]|0)*180/2147483648]);if(r[3]>0&&r[3]<255)H.push(r[3])}
-  const laps=R[19].map(l=>({d:(l[9]||0)/100,t:(l[8]||l[7]||0)/1000,s:l[2]?l[2]*1000+E0:0})).filter(l=>l.t>0);
+  let laps=R[19].map(l=>({d:(l[9]||0)/100,t:(l[8]||l[7]||0)/1000,s:l[2]?l[2]*1000+E0:0})).filter(l=>l.t>0);
+  if(S[5]===5&&S[6]!==18&&R[21].length&&R[19].length>1)laps=poolLaps(R[19],R[21],E0)||laps;
   if(!S[9]&&!laps.length)throw Error("fit");
   const dist=(S[9]||0)/100||laps.reduce((a,l)=>a+l.d,0),dur=Math.round((S[8]||S[7]||0)/1000)||Math.round(laps.reduce((a,l)=>a+l.t,0)),t0=S[2]?S[2]*1000+E0:(laps[0]&&laps[0].s)||0;
   let sport={5:"pool",1:"run",2:"bike",11:"walk",17:"hike"}[S[5]]||"";if(S[5]===5&&S[6]===18)sport="ow";
@@ -472,8 +493,16 @@ function parseTCX(x){const laps=[],P=[],H=[];
   return{name:"",sport:{running:"run",biking:"bike",walking:"walk",hiking:"hike",swimming:"pool"}[sp.toLowerCase()]||"",t0:laps[0].s||0,dist,dur,hr:H.length?Math.round(H.reduce((a,c)=>a+c,0)/H.length):0,hx:H.length?Math.max(...H):0,vs:dur?dist/dur*3.6:0,vx:0,el:0,pts:P.length>1?simplify(P):null,laps:laps.filter(l=>l.t>0)}}
 function parseAct(name,u8){if(/\.fit$/i.test(name))return parseFIT(u8);const s=new TextDecoder().decode(u8);return /\.tcx$/i.test(name)?parseTCX(s):parseGPX(s)}
 //#fitend
+// Distancias de las series de un diseño, en orden (pasos con meta de distancia).
+function wantD(m){const w=[],add=s=>{const d=s?dOf(s):0;if(d>0)w.push(d)};add(m.warm);for(const b of m.blocks||[])for(let r=0;r<(b.reps||1);r++)for(const s of b.steps||[])add(s);add(m.cool);return w}
+// Si el nº de series coincide con el diseño, cada una difiere menos de 50 m y la suma iguala el total registrado,
+// se usan las distancias del diseño (recupera longitudes que Apple Salud/Strava no asignan a ninguna vuelta).
+function snapLaps(laps,id,total){const d=LS.get().find(x=>x.id===id),w=d&&d.m?wantD(d.m):[];
+  if(!laps||!w.length||!total)return laps;const W=laps.filter(l=>l.d>0);
+  if(W.length!==w.length||Math.abs(w.reduce((a,c)=>a+c,0)-total)>1||W.some((l,i)=>Math.abs(l.d-w[i])>50))return laps;
+  let i=0;return laps.map(l=>l.d>0?{...l,d:w[i++]}:l)}
 const localISO=t0=>new Date(t0-new Date().getTimezoneOffset()*6e4).toISOString();
-function applyG(o,r,main){if(!main&&r.t0&&!(FM.t0m<=r.t0)){const l=localISO(r.t0);FM.date=l.slice(0,10);FM.time=l.slice(11,16);FM.dt=1;FM.t0m=r.t0}o.gpx=r.pts?{pts:r.pts}:null;o.laps=r.laps&&r.laps.length?r.laps:null;o.dm=Math.round(r.dist);Object.assign(o,dsp(r.dur));o.hr=r.hr?String(r.hr):"";o.hx=r.hx?String(r.hx):"";
+function applyG(o,r,main){if(!main&&r.t0&&!(FM.t0m<=r.t0)){const l=localISO(r.t0);FM.date=l.slice(0,10);FM.time=l.slice(11,16);FM.dt=1;FM.t0m=r.t0}o.gpx=r.pts?{pts:r.pts}:null;o.laps=r.laps&&r.laps.length?r.laps:null;if(main&&o.laps&&FM.design)o.laps=snapLaps(o.laps,FM.design,r.dist);o.dm=Math.round(r.dist);Object.assign(o,dsp(r.dur));o.hr=r.hr?String(r.hr):"";o.hx=r.hx?String(r.hx):"";
   if(main){if(r.sport){o.sport=r.sport;o.du=isSw(r.sport)?"m":"km"}if(r.name)o.name=r.name;if(r.t0){const l=localISO(r.t0);o.date=l.slice(0,10);o.time=l.slice(11,16);o.dt=1}}
   const sp=o.sport;o.vs=o.vx=o.el=o.a1=o.a2=o.b1=o.b2="";
   if(usesP(sp)){const u=pUnit(sp);[o.a1,o.a2]=pcs(r.dist&&r.dur?r.dur/r.dist*u:0);[o.b1,o.b2]=pcs(r.vx?3600/r.vx*u/1000:0)}
@@ -536,7 +565,7 @@ const metH=(i,o,gps,fn)=>`<label>${t(21)}${distH(i,o)}</label><label>${t(71)}${d
 const UPI='<svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg>',DNI='<svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>';
 const segH=(s,i)=>`<div class="sgm${SGA.includes(i)?" in":""}"><div class="bh"><b>${i+1}</b><select onchange="setF(${i},'sport',this.value);renderTrack()">${SEG.map(id=>opt(id,spName(id),s.sport)).join("")}</select><span class="sp"></span><button class="rb" onclick="mvSeg(${i},-1)">${UPI}</button><button class="rb" onclick="mvSeg(${i},1)">${DNI}</button><button class="rb red" onclick="rmSeg(${i},this)">${XI}</button></div><div class="fg">${metH(i,s,SEGFILE.includes(s.sport),"loadSegGPX("+i+",")}</div></div>`;
 function pickD(id){FM.design=id;const d=LS.get().find(x=>x.id===id);
-  if(d){FM.sport=d.m.sport||"pool";FM.du=isSw(FM.sport)?"m":"km";FM.name=d.m.name||"";const m=totalD(d.m);if(m&&!FM.dm)FM.dm=m}else FM.name="";renderTrack()}
+  if(d){FM.sport=d.m.sport||"pool";FM.du=isSw(FM.sport)?"m":"km";FM.name=d.m.name||"";const m=totalD(d.m);if(m&&!FM.dm)FM.dm=m;if(FM.laps&&FM.dm)FM.laps=snapLaps(FM.laps,id,FM.dm)}else FM.name="";renderTrack()}
 function formBody(){const f=FM,mu=f.sport==="multi",ed=!!f.eid;
   return `<div class="card">${ed?`<div class="bh"><span class="sp"></span><button class="pill" onclick="cancelEdit()">${t(118)}</button></div>`:""}<div class="t2"><div><div class="tdt">
   <label>${t(115)} *<input type="date" value="${f.date}" oninput="setF(-1,'date',this.value)"></label>
@@ -589,7 +618,7 @@ function mapH(id,i,g,label){return `<div class="vmap">${label?`<small class="mu"
 const VI={dist:['var(--ej)','<rect x="2.5" y="8" width="19" height="8.5" rx="2"/><path d="M6.5 8v4M10.5 8v3M14.5 8v4M18.5 8v3"/>'],dur:['var(--re)','<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'],
   kcal:['#ff9f0a','<path d="M12 3c.6 3 5 5 5 10a5 5 0 01-10 0c0-2 1-3.2 2-4 0 2 .8 3 2 3 .2-3-1-5.5 1-9z"/>'],hr:['#ff453a','<path d="M12 20s-7.5-4.6-7.5-10.2A4.2 4.2 0 0112 7.6a4.2 4.2 0 017.5 2.2C19.5 15.4 12 20 12 20z"/>'],
   spd:['var(--ac)','<circle cx="12" cy="13.5" r="7.5"/><path d="M12 13.5l3-3M9.5 3h5M12 3v3"/>'],el:['var(--lime)','<path d="M2.5 19.5l6.2-11 4 6.8 2.8-4.2 6 8.4z"/>']};
-function lapsH(L,sp){if(!L||!L.length)return"";const sw=isSw(sp),bk=sp==="bike"||sp==="sbike";return`<details class="lapd" ontoggle="if(this.open)reveal(this,60)"><summary>${t(L[0].a?144:140)} (${L[0].a?L.length:L.filter(l=>l.d>0).length})</summary>${L.map((l,i)=>{const rest=!(l.d>0),pc=!rest?(sw?l.t/l.d*100:l.t/l.d*1000):0;return`<div class="sgr"><b>${rest?t(141):i+1}</b><span>${fmtDur(Math.round(l.t))}${rest?"":" · "+Math.round(l.d)+" m · "+(bk?(l.d/l.t*3.6).toFixed(1)+" km/h":fmtP(pc,sp))}</span></div>`}).join("")}</details>`}
+function lapsH(L,sp){if(!L||!L.length)return"";let n=0;const sw=isSw(sp),bk=sp==="bike"||sp==="sbike";return`<details class="lapd" ontoggle="if(this.open)reveal(this,60)"><summary>${t(L[0].a?144:140)} (${L[0].a?L.length:L.filter(l=>l.d>0).length})</summary>${L.map((l,i)=>{const rest=!(l.d>0),pc=!rest?(sw?l.t/l.d*100:l.t/l.d*1000):0;return`<div class="sgr"><b>${rest?t(141):++n}</b><span>${fmtDur(Math.round(l.t))}${rest?"":" · "+Math.round(l.d)+" m · "+(bk?(l.d/l.t*3.6).toFixed(1)+" km/h":fmtP(pc,sp))}</span></div>`}).join("")}</details>`}
 const Vtile=(k,l,v)=>v?`<div><span class="vl"><i class="vi" style="color:${VI[k][0]}"><svg viewBox="0 0 24 24">${VI[k][1]}</svg></i><small class="mu">${l}</small></span><b>${v}</b></div>`:"";
 const tilesH=(e,mu)=>`${Vtile("dist",t(21),e.dist?fmtDist(e.dist,mu?"":e.sport):"")}${Vtile("dur",t(71),e.dur?fmtDur(e.dur):"")}${Vtile("kcal",t(72),e.kcal?Math.round(e.kcal):"")}${Vtile("hr",t(114),e.hr?e.hr+" ppm":"")}${Vtile("hr",t(127),e.hx?e.hx+" ppm":"")}${usesP(e.sport)?Vtile("spd",t(138),fmtP(e.ps||(e.dist&&e.dur?e.dur/e.dist*pUnit(e.sport):0),e.sport))+Vtile("spd",t(139),fmtP(e.px||(isPc(e.sport)&&e.vx?3600/e.vx:0),e.sport)):Vtile("spd",t(124),e.vs?e.vs+" km/h":"")+Vtile("spd",t(125),e.vx?e.vx+" km/h":"")}${Vtile("el",t(126),e.el?e.el+" m":"")}`;
 const segV=(e,s,i)=>`<div class="sgi col" id="sg_${e.id}_${i}"><div class="er" onclick="togSeg('${e.id}',${i})">${sic(s.sport)}<b>${esc(spName(s.sport))}</b><span class="mu sgs">${eData(s)}</span><button class="chev" tabindex="-1"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button></div><div class="sb"><div><div class="sgb2"><div class="vt">${tilesH(s,false)}</div>${s.gpx?`<div class="vmaps">${mapH(e.id,i,s.gpx,"")}</div>`:""}</div>${lapsH(s.laps,s.sport)}</div></div></div>`;
