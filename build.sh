@@ -1,7 +1,8 @@
 #!/bin/bash
 # Uso: ./build.sh <arm64|x86_64> <apple-silicon|intel>
 set -euo pipefail
-ARCH="$1"; LABEL="$2"; NAME="Workout Designer"
+ARCH="$1"; LABEL="$2"; NAME="Workout Designer"   # nombre del archivo .app (un nombre de archivo no puede empezar por punto: Finder lo ocultaría)
+VOL="workout designer"
 
 swift build -c release --arch "$ARCH"
 BIN="$(swift build -c release --arch "$ARCH" --show-bin-path)/WorkoutDesigner"
@@ -11,6 +12,9 @@ rm -rf "$OUT"; mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$BIN" "$APP/Contents/MacOS/WorkoutDesigner"
 cp Resources/index.html "$APP/Contents/Resources/index.html"
 cp Info.plist "$APP/Contents/Info.plist"
+# Nombre visible en Finder, Dock y Launchpad: «.workout designer»
+mkdir -p "$APP/Contents/Resources/en.lproj"
+printf 'CFBundleDisplayName = ".workout designer";\nCFBundleName = ".workout designer";\n' > "$APP/Contents/Resources/en.lproj/InfoPlist.strings"
 
 # Icono
 ICONSET="$OUT/AppIcon.iconset"; mkdir -p "$ICONSET"
@@ -25,5 +29,5 @@ codesign --force --deep --sign - "$APP"
 
 # DMG con acceso directo a Aplicaciones
 STAGE="$OUT/dmg"; mkdir -p "$STAGE"; cp -R "$APP" "$STAGE/"; ln -s /Applications "$STAGE/Applications"
-hdiutil create -volname "$NAME" -srcfolder "$STAGE" -ov -format UDZO "WorkoutDesigner-$LABEL.dmg"
+hdiutil create -volname "$VOL" -srcfolder "$STAGE" -ov -format UDZO "WorkoutDesigner-$LABEL.dmg"
 echo "Listo: WorkoutDesigner-$LABEL.dmg"
