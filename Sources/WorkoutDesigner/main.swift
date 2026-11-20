@@ -23,7 +23,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler
             contentRect: NSRect(x: 0, y: 0, width: 980, height: 900),
             styleMask: [.titled, .closable, .miniaturizable, .resizable],
             backing: .buffered, defer: false)
-        window.title = "Workout Designer"
+        window.title = ".workout designer"
         window.contentView = web
         window.setFrameAutosaveName("MainWindow")
         if !window.setFrameUsingName("MainWindow") { window.center() }
@@ -80,7 +80,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler
     }
 
     func say(_ text: String) {
-        let a = NSAlert(); a.messageText = "Workout Designer"; a.informativeText = text
+        let a = NSAlert(); a.messageText = ".workout designer"; a.informativeText = text
         a.addButton(withTitle: "OK"); a.runModal()
     }
 
@@ -230,7 +230,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler
             .link: URL(string: "mailto:beltxo84@proton.me")!
         ]))
         NSApp.orderFrontStandardAboutPanel(options: [
-            NSApplication.AboutPanelOptionKey.applicationName: "Workout Designer",
+            NSApplication.AboutPanelOptionKey.applicationName: ".workout designer",
             NSApplication.AboutPanelOptionKey.applicationVersion: pageVersion,
             NSApplication.AboutPanelOptionKey.version: "",
             NSApplication.AboutPanelOptionKey.credits: credits
@@ -316,14 +316,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler
 
         let appItem = NSMenuItem(); main.addItem(appItem)
         let app = NSMenu(); appItem.submenu = app
-        let about = app.addItem(withTitle: L("about", "Acerca de Workout Designer"), action: #selector(showAbout(_:)), keyEquivalent: "")
+        let about = app.addItem(withTitle: L("about", "Acerca de .workout designer"), action: #selector(showAbout(_:)), keyEquivalent: "")
         about.target = self
+        let comp = app.addItem(withTitle: L("compat", "Compatibilidad de la app"), action: #selector(runJS(_:)), keyEquivalent: "")
+        comp.target = self
+        comp.representedObject = "showCompat()"
         let upd = app.addItem(withTitle: L("upd", "Buscar actualizaciones…"), action: #selector(checkNow(_:)), keyEquivalent: "")
         upd.target = self
         app.addItem(.separator())
-        app.addItem(withTitle: L("hide", "Ocultar Workout Designer"), action: #selector(NSApplication.hide(_:)), keyEquivalent: "h")
+        app.addItem(withTitle: L("hide", "Ocultar .workout designer"), action: #selector(NSApplication.hide(_:)), keyEquivalent: "h")
         app.addItem(.separator())
-        app.addItem(withTitle: L("quit", "Salir de Workout Designer"), action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+        app.addItem(withTitle: L("quit", "Salir de .workout designer"), action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
 
         let fileItem = NSMenuItem(); main.addItem(fileItem)
         let file = NSMenu(title: L("file", "Archivo")); fileItem.submenu = file
