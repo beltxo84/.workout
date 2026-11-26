@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark"><meta name="app-version" content="1.3.1"><meta name="min-shell" content="1.2">
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark"><meta name="app-version" content="1.3.2"><meta name="min-shell" content="1.2">
 <title>.workout designer</title>
 <style>
 :root{--bg:#f2f2f7;--card:#fff;--bg2:#e9e9ee;--seg:#fff;--tx:#000;--mu:#6e6e73;--ln:#e5e5ea;--ac:#8e5cf0;--lime:#4f9a00;--ej:#0a84d6;--re:#c79a00;color-scheme:light dark}
@@ -100,13 +100,13 @@ body.nat #iw{display:none!important}
 .mrow{display:flex;align-items:center;gap:10px;padding:6px 2px}.mrow .ic{width:22px;height:22px;flex:none}.mrow span{flex:1}
 .tabs.vt{margin:0 0 10px}.vt .thumb{left:4px;width:calc((100% - 8px)/2);transform:translateX(0)}.vt[data-v=c] .thumb{transform:translateX(100%)}
 .cvc{padding:12px 14px}.cvs{display:flex;gap:14px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;scrollbar-width:none}.cvs::-webkit-scrollbar{display:none}
-.cvm{flex:0 0 calc((100% - 28px)/3);min-width:0;height:262px;scroll-snap-align:start}.cvm>b{display:block;font-size:15px;height:22px}
+.cvm{flex:0 0 calc((100% - 28px)/3);min-width:0;height:276px;scroll-snap-align:start}.cvm>b{display:block;font-size:15px;height:22px}
 .ys{display:flex;overflow-x:auto;scrollbar-width:none;background:var(--bg2);border-radius:13px;padding:2px;margin:0 0 10px}.ys::-webkit-scrollbar{display:none}
 .ys button{flex:none;border:0;background:none;color:var(--mu);font:inherit;font-size:14px;line-height:19px;height:19px;padding:0 18px;border-radius:11px;cursor:pointer;transition:background .25s,color .25s,transform .28s cubic-bezier(.3,1.5,.5,1)}
 .ys button.on{background:var(--card);color:var(--tx);box-shadow:0 1px 4px #0002}.ys button:hover{transform:scale(1.07)}
 .cvtip{position:fixed;z-index:70;display:none;max-width:300px;background:var(--card);color:var(--tx);border-radius:14px;padding:10px 12px;box-shadow:0 0 0 1px var(--ln),0 10px 30px #0004;pointer-events:none;font-size:14px}
 .cvt{display:flex;gap:10px;align-items:flex-start}.cvt+.cvt{margin-top:8px;padding-top:8px;border-top:1px solid var(--ln)}.cvt .ic{width:24px;height:24px;flex:none}.cvt>div{display:flex;flex-direction:column;gap:2px;min-width:0}
-.cvg{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center}.cvg small{font-size:11px;color:var(--mu);height:16px}
+.cvg{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center}.cvg small{font-size:11px;font-weight:700;color:var(--mu);height:16px}
 .cvd{height:36px;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;color:var(--mu);line-height:1.1}
 .cvd .ic{width:16px;height:16px;stroke-width:3}.cvd.has{cursor:pointer;color:var(--tx);background:var(--bg2);transition:transform .28s cubic-bezier(.3,1.5,.5,1)}.cvd.has:hover{transform:scale(1.12)}
 .cvd.tdy>span:first-child{color:var(--ac);font-weight:700}
@@ -115,16 +115,18 @@ body.nat #iw{display:none!important}
 .pl2{container-type:inline-size}.pkr{display:flex;align-items:center;gap:4px 12px;padding:9px 6px;border-top:1px solid var(--ln);cursor:pointer;border-radius:10px;transition:background .2s}.pkr:first-child{border-top:0}.pkr:hover{background:var(--bg2)}
 .pk1{display:flex;align-items:center;gap:8px;flex:none}.pk1 .ic{width:22px;height:22px}.pk2{display:flex;align-items:baseline;gap:10px;min-width:0;flex:1}.pk2 b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}.pk2 .mu{flex:none;white-space:nowrap}
 @container (max-width:480px){.pkr{flex-direction:column;align-items:flex-start;gap:2px}.pk2{font-size:13px;padding-inline-start:30px;max-width:100%}}
+.pms{margin:0 0 10px}.pmt{margin:0 0 6px;font-size:17px}
 .cvdl{margin-top:10px;border-top:1px solid var(--ln);padding-top:6px}
 .sprow{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}.spsel{flex:1 1 190px;min-width:0}.spflags{display:flex;flex-direction:column;gap:5px;padding-bottom:8px}
 .spflags .chk{display:flex;flex-direction:row;align-items:center;gap:6px;color:var(--mu);font-size:13px;cursor:pointer;white-space:nowrap}.spflags .chk input{width:auto;margin:0}
+.fbs{display:flex;gap:12px;flex-wrap:wrap;margin-top:4px}.fb{display:inline-flex;align-items:center;gap:2px;font-size:13px;color:var(--mu)}.fb .flg{margin:0 4px 0 0}.fl .chk .flg{margin:0 -2px 0 0}
 .flg{width:17px;height:17px;vertical-align:-3px;margin-inline-start:6px;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .tabs button{line-height:20px;will-change:transform}.sports button{line-height:16px}
 .tabs button:hover{transform:scale(1.07)}
-.fseg .pill:hover{background:var(--ac);color:#fff}
-.fseg:has(.pill:hover) .pill.on:not(:hover){background:var(--bg2);color:var(--tx)}
-.pgrp>.pill:first-child,.pgrp>.pill:hover{background:var(--ac);color:#fff}
-.pgrp:has(.pill:hover)>.pill:first-child:not(:hover),.pgrp.nodef>.pill:first-child:not(:hover){background:var(--bg2);color:var(--tx)}
+.fseg .pill:hover,.fseg .pill.hv{background:var(--ac);color:#fff}
+.fseg.hvd .pill.on:not(.hv):not(:hover){background:var(--bg2);color:var(--tx)}
+.pgrp>.pill:first-child,.pgrp>.pill:hover,.pgrp>.pill.hv{background:var(--ac);color:#fff}
+.pgrp.hvd>.pill:first-child:not(.hv):not(:hover),.pgrp.nodef:not(.hvd)>.pill:first-child:not(:hover){background:var(--bg2);color:var(--tx)}
 .pcd.sel{outline-offset:-2px}
 .pdot.dn{background:radial-gradient(circle,#8e8e93 0 3px,transparent 3.6px);box-shadow:inset 0 0 0 2px var(--c,#8e8e93)}
 .fl .chk{display:flex;flex-direction:row;align-items:center;gap:6px;color:var(--mu);font-size:15px;cursor:pointer}.fl .chk input{width:auto;margin:0}.dwh{display:flex;justify-content:space-between;align-items:center;margin:6px 0}.psw .chev{margin-top:0}.psw .pmh{padding:2px 4px;margin:0 -4px}.psw .plb{cursor:pointer}.psl{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}.psw.col .sb{margin-top:-14px}.psw>.pmh{align-self:end}#ptip{min-height:19px;margin:0 2px}.psh{display:flex;flex-direction:column;gap:5px}.psh .pmh{height:34px;padding-top:0;padding-bottom:0}</style></head><body>
@@ -375,7 +377,7 @@ function dupAsk(xid,eid){const f=planFind(xid),e=TR.find(r=>r.id===eid);if(!f||!
 function dupClose(){try{document.getElementById("ovq").remove()}catch(_){}}
 function dupYes(xid,eid){dupClose();const f=planFind(xid);if(!f)return;f.x.done=true;f.x.tr=eid;savePL();renderPlan()}
 function dupNo(xid){dupClose();planComplete(xid)}
-function planPut(ds,m){const p=plan();for(const sp of m.sport==="multi"?(m.segs||[]).map(s=>s.sport):[m.sport])if(!p.sports[sp])p.sports[sp]=PCOL[Object.keys(p.sports).length%PCOL.length];const x={id:uid(),m};(p.days[ds]=p.days[ds]||[]).push(x);PS.sel=ds;PS.mo[ds.slice(0,7)]=true;return x}
+function planPut(ds,m){const p=plan();for(const sp of m.sport==="multi"?(m.segs||[]).map(s=>s.sport):[m.sport])if(!p.sports[sp])p.sports[sp]=PCOL[Object.keys(p.sports).length%PCOL.length];const x={id:uid(),m};(p.days[ds]=p.days[ds]||[]).push(x);PS.sel=ds;PS.cm=ds.slice(0,7);return x}
 const pcol=(p,m)=>p.sports[m.sport==="multi"?((m.segs||[])[0]||{}).sport:m.sport]||"#8e8e93";
 function planDel(id){const f=planFind(id);if(!f)return;plan().days[f.d].splice(f.i,1);if(!plan().days[f.d].length)delete plan().days[f.d];savePL();renderPlan()}
 function planPdf(id){const f=planFind(id);f&&withM(f.x.m,pdfEnt)}
@@ -413,7 +415,7 @@ function planToggle(id){const f=planFind(id);if(!f)return;if(!f.x.done){planComp
   if(f.x.tr&&TR.some(e=>e.id===f.x.tr))delDone(f.x.tr);f.x.done=false;delete f.x.tr;savePL();renderPlan()}
 function planDrag(ev,id){ev.dataTransfer.setData("text/plain",id);ev.dataTransfer.effectAllowed="move"}
 function planDrop(ev,ds){ev.preventDefault();const id=ev.dataTransfer.getData("text/plain");if(id)planMoveTo(id,ds)}
-function planShift(id,nd){const p=plan(),f=planFind(id);if(!f||!nd||nd===f.d)return null;p.days[f.d].splice(f.i,1);if(!p.days[f.d].length)delete p.days[f.d];(p.days[nd]=p.days[nd]||[]).push(f.x);PS.mo[nd.slice(0,7)]=true;return{id,from:f.d,to:nd,n:dDiff(f.d,nd)}}
+function planShift(id,nd){const p=plan(),f=planFind(id);if(!f||!nd||nd===f.d)return null;p.days[f.d].splice(f.i,1);if(!p.days[f.d].length)delete p.days[f.d];(p.days[nd]=p.days[nd]||[]).push(f.x);PS.cm=nd.slice(0,7);return{id,from:f.d,to:nd,n:dDiff(f.d,nd)}}
 function planMoveTo(id,nd){const m=planShift(id,nd);if(!m)return;PS.mv=m;PS.sel=nd;savePL();renderPlan();planAsk()}
 function planAsk(){const m=PS.mv,x=planFind(m.id).x,n=Math.abs(m.n),sp=spName(x.m.sport),pref=(()=>{try{return localStorage.getItem("plpref")||"0"}catch(e){return"0"}})(),e=m.n<0;
   const d=document.createElement("div");d.id="ovm";d.className="ov";d.innerHTML=`<div class="card ovc"><h3>${px(15)}</h3><div class="mu">${esc(fDay(m.from))} → ${esc(fDay(m.to))}</div>`+[[0,px(16)],[2,px(e?19:20,{n,s:sp})],[1,px(e?17:18,{n})]].map(([v,l])=>`<label class="prad"><input type="radio" name="pmv" value="${v}"${pref==v?" checked":""}>${esc(l)}</label>`).join("")+`<div class="eact"><button class="pill pri" onclick="planApply(+(document.querySelector('input[name=pmv]:checked')||{value:0}).value)">${px(21)}</button><button class="pill" onclick="planCancel(true)">${px(22)}</button></div></div>`;document.body.appendChild(d)}
@@ -422,12 +424,12 @@ function planApply(v){const m=PS.mv,p=plan(),f=planFind(m.id);if(!f)return;try{l
   if(v>0){const sp=f.x.m.sport,mv=[];for(const d in p.days)for(const x of p.days[d])if(x.id!==m.id&&d>m.from&&(v===1||x.m.sport===sp))mv.push({d,x});
     for(const o of mv)p.days[o.d]=p.days[o.d].filter(y=>y.id!==o.x.id);for(const o of mv){const nd=addD(o.d,m.n);(p.days[nd]=p.days[nd]||[]).push(o.x)}for(const d in p.days)if(!p.days[d].length)delete p.days[d]}
   const ks=Object.keys(p.days).sort();if(ks.length){if(ks[ks.length-1]>planEnd()){p.mode="end";p.end=ks[ks.length-1]}if(ks[0]<p.start)p.start=ks[0]}
-  savePL();const to=m.to;planCancel();PS.sel=to;PS.mo[to.slice(0,7)]=true;renderPlan()}
+  savePL();const to=m.to;planCancel();PS.sel=to;PS.cm=to.slice(0,7);renderPlan()}
 const icn=id=>{try{return document.getElementById(id).innerHTML}catch(e){return""}},
  PLIB={get:()=>{try{return JSON.parse(localStorage.getItem("plans1"))||[]}catch(e){return[]}},set:(a,q)=>{let ok=false;try{localStorage.setItem("plans1",JSON.stringify(a));ok=true}catch(e){}if(!q)syncPush();return ok}};
 function ptip(i){const e=document.getElementById("ptip");if(e)e.textContent=i===undefined?"":px(31+i)}
 function planStash(){const p=plan();if(!(p.name||Object.keys(p.days).length))return false;const a=PLIB.get(),id=p.sid||(p.sid=uid());p.u=p.u||Date.now();const it={id,name:p.name||px(0),u:p.u,p:JSON.parse(JSON.stringify(p))},i=a.findIndex(x=>x.id===id);if(i>=0)a[i]=it;else a.unshift(it);try{localStorage.setItem("pl1",JSON.stringify(p))}catch(e){}return PLIB.set(a)}
-function planUse(p,bump){PL={name:"",goal:"",start:todayL(),mode:"months",months:3,end:"",sports:{},days:{},...p};PS.sel=null;PS.mo={};PS.sp=undefined;PS.lib=false;savePL(!bump);renderPlan()}
+function planUse(p,bump){PL={name:"",goal:"",start:todayL(),mode:"months",months:3,end:"",sports:{},days:{},...p};PS.sel=null;PS.mo={};PS.cm=null;PS.sp=undefined;PS.lib=false;savePL(!bump);renderPlan()}
 function planMenu(k){tab("p");if(k==="new")planNew();else if(k==="save")planSaveBtn();else if(k==="dl")planDownload();else if(k==="lib"){PS.lib=true;renderPlan()}}
 function planFromSync(){if(!PL||!PL.sid)return;const it=PLIB.get().find(x=>x.id===PL.sid);if(!it){delete PL.sid;try{localStorage.setItem("pl1",JSON.stringify(PL))}catch(e){}return}if(U(it)>(PL.u||0)){PL=JSON.parse(JSON.stringify(it.p));try{localStorage.setItem("pl1",JSON.stringify(PL))}catch(e){}if(TAB==="p")renderPlan()}else if(TAB==="p")renderPlan()}
 function planMerge(a){if(!Array.isArray(a)||!a.length)return;const l=PLIB.get();for(const it of a){if(!it||!it.id||!it.p)continue;const i=l.findIndex(x=>x.id===it.id);if(i<0)l.push(it);else if((it.u||0)>(l[i].u||0))l[i]=it}PLIB.set(l);if(TAB==="p")renderPlan()}
@@ -441,11 +443,14 @@ function planDelLib(id){tomb(id,"p");PLIB.set(PLIB.get().filter(x=>x.id!==id));i
 const planBar=()=>`<div class="top"><div class="g"><button class="cb" onmouseenter="ptip(0)" onmouseleave="ptip()" onfocus="ptip(0)" onblur="ptip()" onclick="planNew()">${icn("bn")}</button><button class="cb" onmouseenter="ptip(1)" onmouseleave="ptip()" onfocus="ptip(1)" onblur="ptip()" onclick="$('#pf').click()">${icn("bo")}</button><button class="cb" onmouseenter="ptip(3)" onmouseleave="ptip()" onfocus="ptip(3)" onblur="ptip()" onclick="planDownload()">${icn("bd")}</button><button class="cb" onmouseenter="ptip(4)" onmouseleave="ptip()" onfocus="ptip(4)" onblur="ptip()" onclick="PS.lib=!PS.lib;renderPlan()">${icn("bv")}</button></div><span class="sp"></span><div class="g"><button class="cb ck" onmouseenter="ptip(2)" onmouseleave="ptip()" onfocus="ptip(2)" onblur="ptip()" onclick="planSaveBtn()">${icn("bk")}</button></div></div><div id="ptip" class="hint"></div><input type="file" id="pf" accept=".plan,.json" hidden onchange="planLoadFile(this.files[0]);this.value=''">`;
 const planLibH=()=>{if(!PS.lib)return"";const a=PLIB.get();return`<div class="card">${a.length?a.map(x=>`<div class="er" onclick="planLoadLib('${x.id}')"><b>${esc(x.name)}</b><span class="mu">${esc(x.p.start||"")} → ${esc(x.p.mode==="end"?x.p.end||"":"")}</span><button class="rb red" style="margin-inline-start:auto" onclick="event.stopPropagation();planDelLib('${x.id}')">${XI}</button></div>`).join(""):`<div class="mu">${t(6)}</div>`}</div>`};
 const togSp=()=>{const el=document.getElementById("psw");if(!el)return;const o=el.classList.contains("col");PS.sp=o;el.classList.toggle("col",!o)};
-const togM=m=>{const el=document.getElementById("pm_"+m);if(!el)return;const o=el.classList.contains("col");PS.mo[m]=o;el.classList.toggle("col",!o)};
+const mShort=m=>{const[y,mo]=m.split("-").map(Number),s=new Date(y,mo-1,1).toLocaleDateString(LANG,{month:"short",year:"numeric"});return s.charAt(0).toUpperCase()+s.slice(1)};
+function planMonth(m){PS.cm=m;renderPlan()}
+function planStripFix(){try{const ys=$("#pms");if(!ys||!ys.querySelector)return;const on=ys.querySelector(".on");if(on)ys.scrollLeft=on.offsetLeft-(ys.clientWidth-on.offsetWidth)/2}catch(e){}}
 function calH(){const p=plan(),ms=planMonths(),s=p.start,e=planEnd(),td=todayL(),ref=(PS.sel||td).slice(0,7),wd=[...Array(7)].map((_,i)=>`<small>${new Date(2024,0,1+i).toLocaleDateString(LANG,{weekday:"narrow"})}</small>`).join("");
-  return ms.map(m=>{const open=PS.mo[m]!==undefined?PS.mo[m]:(ms.includes(ref)?m===ref:m===ms[0]),[y,mo]=m.split("-").map(Number),off=(new Date(y,mo-1,1).getDay()+6)%7,nd=new Date(y,mo,0).getDate();let c="";for(let i=0;i<off;i++)c+="<div></div>";
-    for(let d=1;d<=nd;d++){const ds=m+"-"+pad2(d),L=p.days[ds]||[];c+=`<div class="pcd${ds>=s&&ds<=e?"":" off"}${ds===PS.sel?" sel":""}${ds===td?" tdy":""}" onclick="planSel('${ds}')" ondragover="event.preventDefault()" ondrop="planDrop(event,'${ds}')"><span>${d}</span><div class="pdots">${L.map(x=>`<i class="pdot${x.done?" dn":""}" draggable="true" ondragstart="planDrag(event,'${x.id}')" style="${x.done?"--c":"background"}:${pcol(p,x.m)}"></i>`).join("")}</div></div>`}
-    return`<div class="card pmc${open?"":" col"}" id="pm_${m}"><div class="er pmh" onclick="togM('${m}')"><button class="chev" tabindex="-1"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button><b>${esc(mName(m))}</b></div><div class="sb"><div><div class="pcg">${wd}${c}</div></div></div></div>`}).join("")}
+  const m=ms.includes(PS.cm)?PS.cm:ms.includes(ref)?ref:ms[0];PS.cm=m;
+  const [y,mo]=m.split("-").map(Number),off=(new Date(y,mo-1,1).getDay()+6)%7,nd=new Date(y,mo,0).getDate();let c="";for(let i=0;i<off;i++)c+="<div></div>";
+  for(let d=1;d<=nd;d++){const ds=m+"-"+pad2(d),L=p.days[ds]||[];c+=`<div class="pcd${ds>=s&&ds<=e?"":" off"}${ds===PS.sel?" sel":""}${ds===td?" tdy":""}" onclick="planSel('${ds}')" ondragover="event.preventDefault()" ondrop="planDrop(event,'${ds}')"><span>${d}</span><div class="pdots">${L.map(x=>`<i class="pdot${x.done?" dn":""}" draggable="true" ondragstart="planDrag(event,'${x.id}')" style="${x.done?"--c":"background"}:${pcol(p,x.m)}"></i>`).join("")}</div></div>`}
+  return`<div class="ys pms" id="pms">${ms.map(k=>`<button data-m="${k}" class="${k===m?"on":""}" onclick="planMonth('${k}')">${esc(mShort(k))}</button>`).join("")}</div><div class="card pmc" id="pm_${m}"><div class="pmt"><b>${esc(mName(m))}</b></div><div class="pcg">${wd}${c}</div></div>`}
 const multiRows=w=>`<div class="eb"><div class="ebh"><b>${esc(t(KINDS[w.kind]||107))}</b></div>${(w.segs||[]).map(s=>`<div class="mrow">${sic(s.sport)}<span>${esc(spName(s.sport))}</span><b>${fmtDist(s.dist||0,s.sport)}</b></div>`).join("")}</div>`;
 function planEntH(x,n){const p=plan(),w=x.m,col=pcol(p,w),op=PS.open[x.id]===undefined?n===1:PS.open[x.id],air=(typeof document!=="undefined"&&document.querySelector&&document.querySelector('[onclick="enviar()"]')||{}).innerHTML||"⇪";
   const body=op?`<div class="pbody">${w.sport==="multi"?multiRows(w):withM(w,()=>entRows().map(o=>o.blk?`<div class="eb"><div class="ebh"><b>${esc(o.h)}</b>${o.reps?`<span class="ebr">${esc(o.reps)}</span>`:""}</div>${o.rows.map(rowH).join("")}</div>`:rowH(o)).join(""))}
@@ -460,7 +465,7 @@ function dayH(){const p=plan(),ds=PS.sel;if(!ds)return`<div class="mu">${px(28)}
 function renderPlan(){const p=plan(),ep=$("#pp");if(!ep)return;
   const sports=SP.filter(s=>s.id!=="multi").map(s=>{const on=!!p.sports[s.id];return`<label class="psp"><input type="checkbox"${on?" checked":""} onchange="planSport('${s.id}',this.checked)"><span>${esc(spName(s.id))}</span><input type="color" value="${p.sports[s.id]||"#8e8e93"}"${on?"":" disabled"} onchange="planColor('${s.id}',this.value)"></label>`}).join("");
   const spo=PS.sp===undefined?!Object.keys(p.sports).length:PS.sp,data=`<div class="card"><div class="pgrid"><label>${px(3)}<input value="${esc(p.name)}" oninput="plan().name=this.value;savePL()"></label><label>${px(4)}<input value="${esc(p.goal)}" oninput="plan().goal=this.value;savePL()"></label><label>${px(6)}<select onchange="planSet('mode',this.value)"><option value="months"${p.mode==="months"?" selected":""}>${px(26)}</option><option value="end"${p.mode==="end"?" selected":""}>${px(27)}</option></select></label><label>${px(5)}<input type="date" value="${p.start}" onchange="planSet('start',this.value)"></label>${p.mode==="months"?`<label>${px(7)}<input type="number" min="1" max="36" value="${p.months}" onchange="planSet('months',+this.value)"><small class="mu">${px(8)}: ${esc(fDay(planEnd()))}</small></label>`:`<label>${px(8)}<input type="date" value="${planEnd()}" onchange="planSet('end',this.value)"></label>`}<div class="psw${spo?"":" col"}" id="psw" style="display:contents"><div class="psh"><span class="plb">&nbsp;</span><div class="er pmh" onclick="togSp()"><button class="chev" tabindex="-1"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button><span class="plb">${px(9)}</span></div></div><div class="sb" style="grid-column:1/-1"><div><div class="psl">${sports}</div></div></div></div></div></div>`;
-  ep.innerHTML=planBar()+planLibH()+secH("pl_d",px(1),data)+secH("pl_c",px(2),`<div class="plc"><div class="plL">${calH()}</div><div class="plR card">${dayH()}</div></div>`)}
+  ep.innerHTML=planBar()+planLibH()+secH("pl_d",px(1),data)+secH("pl_c",px(2),`<div class="plc"><div class="plL">${calH()}</div><div class="plR card">${dayH()}</div></div>`);planStripFix()}
 let TAB="d",TR=[],FL={m:"all",y:"",mo:"",a:"",b:"",sp:"",mu:false,co:false,io:false},FM=null,PIN=null,COL={tot:0,frm:0,lst:0};
 const norm=e=>{if(e.date&&e.date.length>10){e.time=e.date.slice(11,16);e.date=e.date.slice(0,10)}return e};
 try{TR=JSON.parse(localStorage.getItem("tr1")||"[]").map(norm)}catch(e){TR=[]}
@@ -475,7 +480,9 @@ const isSw=id=>id==="pool"||id==="ow",hasSpeed=id=>id==="bike",isPc=id=>["run","
 const TS=SP.map(s=>s.id).concat("multi"),SEG=["pool","ow","bike","sbike","run","trun"],KINDS={tri:108,du:109,aq:110},TPL={tri:["ow","bike","run"],du:["run","bike","run"],aq:["run","ow","run"]};
 const spName=id=>{if(id==="multi")return t(107);const i=SP.findIndex(s=>s.id===id);return i<0?id:t(39+i)};
 const eTitle=e=>e.sport==="multi"?t(KINDS[e.kind]||107):spName(e.sport);
-const flagI=e=>(e.comp?`<svg class="flg" viewBox="0 0 24 24" style="stroke:#ffd60a;fill:#ffd60a44"><title>${esc(t(157))}</title><path d="M8.5 3l3.5 6 3.5-6M12 9.2a5.3 5.3 0 100 10.6 5.3 5.3 0 000-10.6z"/><path d="M12 12.2v4.6M10.2 14.5h3.6"/></svg>`:"")+(e.imp?`<svg class="flg" viewBox="0 0 24 24" style="stroke:#ff3b30;fill:#ff3b3044"><title>${esc(t(158))}</title><path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.9-5.2-2.8-5.2 2.8 1-5.9-4.3-4.1 5.9-.8z"/></svg>`:"");
+const FLG={comp:`<svg class="flg" viewBox="0 0 24 24" style="stroke:#ffd60a;fill:#ffd60a44"><path d="M8.5 3l3.5 6 3.5-6M12 9.2a5.3 5.3 0 100 10.6 5.3 5.3 0 000-10.6z"/><path d="M12 12.2v4.6M10.2 14.5h3.6"/></svg>`,imp:`<svg class="flg" viewBox="0 0 24 24" style="stroke:#ff3b30;fill:#ff3b3044"><path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.9-5.2-2.8-5.2 2.8 1-5.9-4.3-4.1 5.9-.8z"/></svg>`};
+const flagI=e=>(e.comp?`<span title="${esc(t(157))}">${FLG.comp}</span>`:"")+(e.imp?`<span title="${esc(t(158))}">${FLG.imp}</span>`:"");
+const flagB=e=>(e.comp?`<span class="fb">${FLG.comp}${esc(t(157))}</span>`:"")+(e.imp?`<span class="fb">${FLG.imp}${esc(t(158))}</span>`:"");
 const sic=id=>`<svg class="ic" viewBox="0 0 40 40" fill="none" stroke="var(--lime)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">${id==="multi"?IP.multi:IP[(SP.find(s=>s.id===id)||SP[0]).ic]}</svg>`;
 const PEN='<svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16zM13 7l4 4"/></svg>',XI='<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>';
 const EMP={uh:"",um:"",us:"",kc:"",hr:"",hx:"",vs:"",vx:"",el:"",a1:"",a2:"",b1:"",b2:"",dm:0,gpx:null};
@@ -639,7 +646,7 @@ function linkToPlan(sel,e){const cur=plan(),isCur=sel==="cur"||cur.sid===sel;let
   const ds=e.date.slice(0,10);if(ds<p.start||ds>planEndOf(p))return false;
   const m=entryToM(e);if(!p.sports)p.sports={};for(const sp of m.sport==="multi"?m.segs.map(s=>s.sport):[m.sport])if(!p.sports[sp])p.sports[sp]=PCOL[Object.keys(p.sports).length%PCOL.length];
   (p.days[ds]=p.days[ds]||[]).push({id:uid(),m,done:true,tr:e.id});
-  if(isCur){PS.mo[ds.slice(0,7)]=true;savePL()}else{it.u=Date.now();p.u=it.u;PLIB.set(a)}return true}
+  if(isCur){PS.cm=ds.slice(0,7);savePL()}else{it.u=Date.now();p.u=it.u;PLIB.set(a)}return true}
 function setF(i,f,v){const o=i<0?FM:FM.segs[i];
   if(f==="dr")o.dm=num(v)*(o.du==="km"?1000:1);else if(f==="du")o.du=v;else if(f==="sport"){o.sport=v;o.du=isSw(v)?"m":"km";if(i>=0?!SEGGPS.includes(v):!HASGPX(v))o.gpx=null}else o[f]=v;
   if(f==="date"||f==="time")FM.dt=1;if(f==="date"&&i<0)refreshPlSel();
@@ -696,7 +703,7 @@ const inF=e=>(!FL.co||e.comp)&&(!FL.io||e.imp)&&(!FL.sp||(FL.sp==="multi"?e.spor
 const filtered=()=>TR.filter(inF).sort((a,b)=>(b.date+(b.time||"")).localeCompare(a.date+(a.time||"")));
 function filterH(ys){return `<div class="card"><div class="fl fseg">${[["all",79],["year",80],["month",81],["range",82]].map(([k,i])=>`<button class="pill${FL.m===k?" on":""}" onclick="FL.m='${k}';renderTrack()">${t(i)}</button>`).join("")}</div><div class="fl">`+
   (FL.m==="year"?`<select onchange="FL.y=this.value;renderTrack()">${ys.map(y=>opt(y,y,FL.y)).join("")}</select>`:FL.m==="month"?`<input type="month" value="${FL.mo}" onchange="FL.mo=this.value;renderTrack()">`:FL.m==="range"?`<label class="mu">${t(83)} <input type="date" value="${FL.a}" onchange="FL.a=this.value;renderTrack()"></label><label class="mu">${t(84)} <input type="date" value="${FL.b}" onchange="FL.b=this.value;renderTrack()"></label>`:"")+
-  `<select onchange="FL.sp=this.value;renderTrack()">${opt("",t(85),FL.sp)}${TS.map(id=>opt(id,spName(id),FL.sp)).join("")}</select>${hasMS(FL.sp)?`<label class="chk"><input type="checkbox"${FL.mu?" checked":""} onchange="FL.mu=this.checked;renderTrack()">${t(155)}</label>`:""}${hasF("imp")?`<label class="chk"><input type="checkbox"${FL.io?" checked":""} onchange="FL.io=this.checked;renderTrack()">${t(159)}</label>`:""}${hasF("comp")?`<label class="chk"><input type="checkbox"${FL.co?" checked":""} onchange="FL.co=this.checked;renderTrack()">${t(160)}</label>`:""}</div></div>`}
+  `<select onchange="FL.sp=this.value;renderTrack()">${opt("",t(85),FL.sp)}${TS.map(id=>opt(id,spName(id),FL.sp)).join("")}</select>${hasMS(FL.sp)?`<label class="chk"><input type="checkbox"${FL.mu?" checked":""} onchange="FL.mu=this.checked;renderTrack()">${t(155)}</label>`:""}${hasF("imp")&&!FL.co?`<label class="chk"><input type="checkbox"${FL.io?" checked":""} onchange="FL.io=this.checked;renderTrack()">${FLG.imp}${t(159)}</label>`:""}${hasF("comp")&&!FL.io?`<label class="chk"><input type="checkbox"${FL.co?" checked":""} onchange="FL.co=this.checked;renderTrack()">${FLG.comp}${t(160)}</label>`:""}</div></div>`}
 function calc(L){const by={},T={d:0,s:0,k:0},ids=new Set();
   L.forEach(e=>parts(e).forEach(p=>{if(FL.sp&&FL.sp!=="multi"&&p.sport!==FL.sp)return;const b=by[p.sport]||(by[p.sport]={ids:new Set(),d:0,s:0,k:0});b.ids.add(e.id);ids.add(e.id);for(const o of[b,T]){o.d+=p.dist||0;o.s+=p.dur||0;o.k+=p.kcal||0}}));
   T.n=FL.sp&&FL.sp!=="multi"?ids.size:L.length;return{by,T}}
@@ -709,6 +716,7 @@ function byH({by}){const rows=SP.filter(s=>by[s.id]).map(s=>{const b=by[s.id];re
 const eData=e=>[e.dist?fmtDist(e.dist,e.sport==="multi"?"":e.sport):"",e.dur?fmtDur(e.dur):"",e.kcal?Math.round(e.kcal)+" kcal":"",e.hr?e.hr+" ppm":""].filter(Boolean).join(" · ");
 const selId=L=>PIN&&L.some(e=>e.id===PIN)?PIN:L[0]&&L[0].id;
 const CV={v:"l",i:null,y:0,y0:0,step:0};
+try{document.addEventListener("mouseover",e=>{const b=e.target&&e.target.closest&&e.target.closest(".fseg>.pill,.pgrp>.pill");if(!b)return;const g=b.parentElement;g.classList.add("hvd");for(const x of g.children)if(x!==b)x.classList.remove("hv");b.classList.add("hv")})}catch(e){}
 function setView(v){const b=$("#vtabs");if(b){b.dataset.v=v;b.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.v===v))}CV.v=v;setTimeout(()=>{CV.v===v&&TAB==="s"&&renderTrack()},260)}
 function calDay(ds){const L=filtered().filter(e=>e.date.slice(0,10)===ds).sort((a,b)=>(a.time||"").localeCompare(b.time||""));if(!L.length)return;if(!L.some(e=>e.id===PIN))PIN=L[0].id;renderTrack()}
 // Calendario de entrenamientos completados: tira horizontal de meses (se ven 3), pasarela de años encima
@@ -734,7 +742,7 @@ function cvScroll(){if(cvRaf)return;cvRaf=requestAnimationFrame(()=>{cvRaf=0;con
 function cvYear(y){const cs=$("#cvs");if(!cs)return;const now=new Date(),cy=now.getFullYear(),i=y===cy?Math.max(0,(cy-CV.y0)*12+now.getMonth()-2):(y-CV.y0)*12;CV.y=y;CV.i=i;cvMarkY();CV.lock=Date.now()+700;cs.style.scrollBehavior="smooth";cs.scrollLeft=i*CV.step;setTimeout(()=>{cs.style.scrollBehavior="auto"},760)}
 // ventana emergente al pasar el cursor por un día con entrenamientos
 function cvTip(el,ds){const E=(CV.by||{})[ds];if(!E)return;let tp=document.querySelector("#cvtip");if(!tp){tp=document.createElement("div");tp.id="cvtip";tp.className="cvtip";document.body.appendChild(tp)}
-  tp.innerHTML=E.map(e=>`<div class="cvt">${cvCol(e)?sic(e.sport).replace("var(--lime)",cvCol(e)):sic(e.sport)}<div><b>${esc(eTitle(e))}${flagI(e)}</b><span class="mu">${fmtWhen(e)}${e.name?" · "+esc(e.name):""}</span><span>${eData(e)}</span></div></div>`).join("");
+  tp.innerHTML=E.map(e=>`<div class="cvt">${cvCol(e)?sic(e.sport).replace("var(--lime)",cvCol(e)):sic(e.sport)}<div><b>${esc(eTitle(e))}</b><span class="mu">${fmtWhen(e)}${e.name?" · "+esc(e.name):""}</span>${flagB(e)?`<span class="fbs">${flagB(e)}</span>`:""}<span>${eData(e)}</span></div></div>`).join("");
   tp.style.display="block";const r=el.getBoundingClientRect(),w=tp.offsetWidth,hh=tp.offsetHeight;let x=Math.min(innerWidth-w-8,Math.max(8,r.left+r.width/2-w/2)),y=r.top-hh-8;if(y<8)y=r.bottom+8;tp.style.left=x+"px";tp.style.top=y+"px"}
 function cvTipHide(){const tp=document.querySelector("#cvtip");if(tp)tp.style.display="none"}
 function listH(L){const s=selId(L);
@@ -754,7 +762,7 @@ const segV=(e,s,i)=>`<div class="sgi col" id="sg_${e.id}_${i}"><div class="er" o
 const reveal=(el,ms=380)=>{if(el&&el.scrollIntoView)setTimeout(()=>{try{el.scrollIntoView({block:"nearest",behavior:"smooth"})}catch(e){}},ms)};
 const togSeg=(id,i)=>{const el=document.getElementById("sg_"+id+"_"+i);if(el){el.classList.toggle("col");if(!el.classList.contains("col"))reveal(el)}};
 function viewH(e){const _tile=(k,l,v)=>v?`<div><span class="vl"><i class="vi" style="color:${VI[k][0]}"><svg viewBox="0 0 24 24">${VI[k][1]}</svg></i><small class="mu">${l}</small></span><b>${v}</b></div>`:"",mu=e.sport==="multi";
-  const data=`<div class="vd"><div class="bh">${sic(e.sport)}<b>${esc(eTitle(e))}${flagI(e)}</b><button class="rb" style="margin-left:auto" title="${esc(t(120))}" onclick="editDone('${e.id}')">${PEN}</button></div><div class="mu">${fmtWhen(e)}${e.name?" · "+esc(e.name):""}</div><div class="vt">${tilesH(e,mu)}</div>`+
+  const data=`<div class="vd"><div class="bh">${sic(e.sport)}<b>${esc(eTitle(e))}${flagI(e)}</b><button class="rb" style="margin-left:auto" title="${esc(t(120))}" onclick="editDone('${e.id}')">${PEN}</button></div><div class="mu">${fmtWhen(e)}${e.name?" · "+esc(e.name):""}</div>${flagB(e)?`<div class="fbs">${flagB(e)}</div>`:""}<div class="vt">${tilesH(e,mu)}</div>`+
     (mu?`<div class="sgl">${(e.segs||[]).map((s,i)=>segV(e,s,i)).join("")}</div>`:"")+"</div>";
   const maps=mu?"":(e.gpx?mapH(e.id,-1,e.gpx,""):"");
   return `<div class="vin vgrid${maps?"":" one"}">${data}${maps?`<div class="vmaps">${maps}</div>`:""}${!mu&&e.laps&&e.laps.length?`<div class="vlaps">${lapsH(e.laps,e.sport)}</div>`:""}</div>`}
